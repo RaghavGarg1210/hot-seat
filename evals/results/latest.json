@@ -1,0 +1,205 @@
+{
+  "createdAt": "2026-09-25T01:12:08.155Z",
+  "fixtures": 12,
+  "baseline": {
+    "persona": 0.9166666666666666,
+    "challenge": 0.75
+  },
+  "jev": null,
+  "jevLatencyP95": null,
+  "note": "Small hand-labeled smoke set, not a general accuracy benchmark. No voice end-to-end latency measured here.",
+  "rows": [
+    {
+      "text": "We have interviewed 18 customers and three agreed to an unpaid pilot. We have not tested pricing yet.",
+      "expected": {
+        "persona": "investor",
+        "challenge": false
+      },
+      "baseline": {
+        "persona": "customer",
+        "reaction": "interested",
+        "challenge": false,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "Everyone will love this. We will take over the whole market immediately.",
+      "expected": {
+        "persona": "investor",
+        "challenge": true
+      },
+      "baseline": {
+        "persona": "investor",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "Our product makes everything better through innovation and synergy.",
+      "expected": {
+        "persona": "customer",
+        "challenge": true
+      },
+      "baseline": {
+        "persona": "customer",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "The customer uploads the same sales CSV they already export; we return a daily preparation checklist.",
+      "expected": {
+        "persona": "customer",
+        "challenge": false
+      },
+      "baseline": {
+        "persona": "customer",
+        "reaction": "interested",
+        "challenge": false,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "We will build every integration in a week even though we have no engineering team.",
+      "expected": {
+        "persona": "operator",
+        "challenge": true
+      },
+      "baseline": {
+        "persona": "operator",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "We charge 79 dollars per month. Three pilot users signed letters agreeing to this price, but no money has changed hands.",
+      "expected": {
+        "persona": "investor",
+        "challenge": false
+      },
+      "baseline": {
+        "persona": "investor",
+        "reaction": "interested",
+        "challenge": false,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "Actually I misspoke: we have three pilots, not thirty. None are paying yet.",
+      "expected": {
+        "persona": "investor",
+        "challenge": false
+      },
+      "baseline": {
+        "persona": "investor",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "Our distribution plan is to go viral. We have no specific channel or launch experiment planned.",
+      "expected": {
+        "persona": "operator",
+        "challenge": true
+      },
+      "baseline": {
+        "persona": "operator",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "I cannot answer whether people would switch yet. Next week we will observe five shop owners using their current workflow.",
+      "expected": {
+        "persona": "customer",
+        "challenge": false
+      },
+      "baseline": {
+        "persona": "customer",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "We plan to launch a CSV-only prototype before building integrations. The first test is whether managers use the checklist each morning.",
+      "expected": {
+        "persona": "operator",
+        "challenge": false
+      },
+      "baseline": {
+        "persona": "operator",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "Our revenue will reach a million next month because the market is huge.",
+      "expected": {
+        "persona": "investor",
+        "challenge": true
+      },
+      "baseline": {
+        "persona": "investor",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    },
+    {
+      "text": "You asked about price, but let me tell you how beautiful our branding is instead.",
+      "expected": {
+        "persona": "investor",
+        "challenge": true
+      },
+      "baseline": {
+        "persona": "investor",
+        "reaction": "questioning",
+        "challenge": true,
+        "confidence": 0.5,
+        "source": "baseline"
+      },
+      "jev": null,
+      "jevMs": null
+    }
+  ]
+}
