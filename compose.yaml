@@ -1,0 +1,50 @@
+services:
+  web:
+    build:
+      context: .
+      target: web
+    environment:
+      API_INTERNAL_URL: http://livekit:4000
+    ports:
+      - '127.0.0.1:3000:3000'
+    depends_on:
+      server:
+        condition: service_healthy
+  server:
+    build:
+      context: .
+      target: server
+    network_mode: service:livekit
+    env_file: .env
+    environment:
+      HOST: 0.0.0.0
+      DATA_DIR: /app/data
+      LIVEKIT_URL: ws://127.0.0.1:7880
+      LIVEKIT_PUBLIC_URL: ws://127.0.0.1:7880
+      SESSION_API_URL: http://127.0.0.1:4000
+    volumes:
+      - hotseat-data:/app/data
+    depends_on:
+      - livekit
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:4000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+  livekit:
+    image: livekit/livekit-server:v1.9.12
+    command: ['--config', '/etc/livekit.yaml']
+    volumes:
+      - ./infra/livekit.yaml:/etc/livekit.yaml:ro
+    ports:
+      - '127.0.0.1:7880:7880'
+      - '127.0.0.1:7881:7881'
+      - '127.0.0.1:50000-50020:50000-50020/udp'
+volumes:
+  hotseat-data:
