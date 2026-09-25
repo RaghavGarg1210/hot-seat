@@ -1,0 +1,11 @@
+node_modules
+.next
+package-lock.json
+test-results
+playwright-report
+data
+docs/images
+evals/results
+apps/web/AGENTS.md
+apps/web/CLAUDE.md
+apps/web/next-env.d.ts
