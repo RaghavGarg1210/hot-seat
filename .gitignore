@@ -1,0 +1,14 @@
+node_modules/
+.next/
+.env
+.env.*
+!.env.example
+data/
+*.tsbuildinfo
+test-results/
+playwright-report/
+.DS_Store
+
+# Local framework assistant guidance
+apps/web/AGENTS.md
+apps/web/CLAUDE.md

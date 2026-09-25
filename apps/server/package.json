@@ -1,0 +1,25 @@
+{
+  "name": "@hotseat/server",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch --env-file=../../.env src/index.ts",
+    "start": "tsx --env-file-if-exists=../../.env src/index.ts",
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@hotseat/shared": "*",
+    "@livekit/agents": "^1.0.0",
+    "@livekit/agents-plugin-openai": "^1.0.0",
+    "@livekit/agents-plugin-silero": "^1.0.0",
+    "@fastify/cors": "^11.0.0",
+    "@fastify/multipart": "^9.0.0",
+    "fastify": "^5.6.0",
+    "livekit-server-sdk": "^2.14.0",
+    "openai": "^6.0.0",
+    "pdfjs-dist": "^6.2.108",
+    "zod": "^3.25.0"
+  }
+}
