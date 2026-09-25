@@ -15,13 +15,7 @@ import {
   Upload,
   RotateCcw,
   Download,
-  Trash2,
   Check,
-  Flame,
-  Command,
-  MessageSquare,
-  Headphones,
-  Clock,
   AlertCircle,
   X,
 } from 'lucide-react';
@@ -38,18 +32,9 @@ import {
   type FeedbackItem,
 } from '@hotseat/shared';
 import { Avatar } from './avatar';
+import { StudioHome, type SessionSummary } from './studio-home';
 
 type View = 'home' | 'prepare' | 'room' | 'debrief';
-type Summary = {
-  id: string;
-  name: string;
-  createdAt: number;
-  status: Session['status'];
-  pressure: Pressure;
-  duration: number;
-  mode: Session['mode'];
-  elapsedMs: number;
-};
 const personas = Object.keys(PANEL) as Persona[];
 async function api<T>(path: string, body?: unknown, method?: string): Promise<T> {
   const response = await fetch(`/api${path}`, {
@@ -67,7 +52,7 @@ async function api<T>(path: string, body?: unknown, method?: string): Promise<T>
 
 export default function HotSeat() {
   const [view, setView] = useState<View>('home');
-  const [history, setHistory] = useState<Summary[]>([]);
+  const [history, setHistory] = useState<SessionSummary[]>([]);
   const [providers, setProviders] = useState({ openai: false, jev: false });
   const [session, setSession] = useState<Session | null>(null);
   const [parent, setParent] = useState<Session | null>(null);
@@ -97,7 +82,7 @@ export default function HotSeat() {
   const audioElements = useRef<HTMLMediaElement[]>([]);
   const lastTurn = useRef<HTMLDivElement | null>(null);
   const refresh = useCallback(async () => {
-    setHistory(await api<Summary[]>('/sessions'));
+    setHistory(await api<SessionSummary[]>('/sessions'));
     const health = await api<{ providers: typeof providers }>('/health');
     setProviders(health.providers);
   }, []);
@@ -429,25 +414,30 @@ export default function HotSeat() {
       ? session.transcript.slice(0, replayIndex)
       : session?.transcript || [];
   return (
-    <div className="app-shell">
-      <aside className="sidebar">
-        <button className="brand" onClick={() => void run('', home)}>
-          <span className="brand-icon">
-            <Flame size={22} />
-          </span>
+    <div className={`app-shell ${view === 'room' ? 'in-session' : ''}`}>
+      <a className="skip-link" href="#workspace">
+        Skip to workspace
+      </a>
+      <header className="studio-header">
+        <button className="brand" aria-label="HotSeat studio" onClick={() => void run('', home)}>
+          <svg className="brand-mark" viewBox="0 0 32 36" aria-hidden="true">
+            <path d="M8 3h16v15H8zM5 20h22v5H5z" fill="currentColor" />
+            <path d="M8 25v8m16-8v8" stroke="currentColor" strokeWidth="3" />
+          </svg>
           hotseat<span className="brand-dot">.</span>
         </button>
-        <span className="workspace-label">YOUR PRACTICE SPACE</span>
-        <nav>
+        <span className="brand-description">A place to practice.</span>
+        <nav aria-label="Main navigation">
           <button
             className={view === 'home' ? 'nav active' : 'nav'}
+            aria-current={view === 'home' ? 'page' : undefined}
             onClick={() => void run('', home)}
           >
-            <Command size={17} />
-            Overview
+            Studio
           </button>
           <button
             className={view === 'prepare' ? 'nav active' : 'nav'}
+            aria-current={view === 'prepare' ? 'page' : undefined}
             onClick={() => {
               void run('', async () => {
                 await home();
@@ -457,47 +447,19 @@ export default function HotSeat() {
               });
             }}
           >
-            <Plus size={18} />
-            New session
+            <Plus size={15} /> New session
           </button>
         </nav>
-        <div className="sidebar-note">
-          <span className="tiny-label">
-            A LITTLE PRESSURE.
-            <br />A LOT MORE CONFIDENCE.
-          </span>
-          <p>The hard questions feel easier the second time.</p>
-          <span className="line-art">↗</span>
-        </div>
-        <div className="local-status">
-          <i />
-          Local workspace<span>Saved on this device</span>
-        </div>
         <a
           className="github-link"
           href="https://github.com/RaghavGarg1210/hot-seat"
           target="_blank"
           rel="noreferrer"
         >
-          View on GitHub <ArrowUpRight size={14} />
+          GitHub <ArrowUpRight size={14} />
         </a>
-      </aside>
-      <main className="main-area">
-        <header className="topbar">
-          <span>
-            {view === 'home'
-              ? 'Overview'
-              : view === 'prepare'
-                ? 'Session setup'
-                : view === 'room'
-                  ? 'The practice room'
-                  : 'Your debrief'}
-          </span>
-          <div>
-            <span className="pill muted">EARLY ACCESS</span>
-            <span className="user-badge">HS</span>
-          </div>
-        </header>
+      </header>
+      <main className="main-area" id="workspace" tabIndex={-1}>
         {(error || notice) && (
           <div className={`notice ${error ? 'error' : ''}`} role={error ? 'alert' : 'status'}>
             <AlertCircle size={17} />
@@ -514,183 +476,25 @@ export default function HotSeat() {
           </div>
         )}
         {view === 'home' && (
-          <div className="page home">
-            <div className="eyebrow">
-              <span />
-              THE ROOM BEFORE THE REAL ROOM
-            </div>
-            <section className="hero">
-              <div className="hero-copy">
-                <h1>
-                  Better under
-                  <br />
-                  <em>pressure.</em>
-                </h1>
-                <p>
-                  Pitch your idea. Face the hard questions.
-                  <br />
-                  Walk into your next meeting ready.
-                </p>
-                <div className="hero-actions">
-                  <button
-                    className="primary"
-                    onClick={() => {
-                      setPitch(null);
-                      setConsent(false);
-                      setView('prepare');
-                    }}
-                  >
-                    <Plus size={18} />
-                    Start a session
-                  </button>
-                  <button
-                    className="text-button"
-                    disabled={!!busy}
-                    onClick={() => void run('Loading sample', sample)}
-                  >
-                    <Play size={15} />
-                    Watch a sample
-                  </button>
-                </div>
-                <div className="hero-detail">
-                  <Clock size={14} />
-                  5–12 minutes <span>·</span>
-                  <Headphones size={14} />
-                  Headphones recommended
-                </div>
-              </div>
-              <div className="preview">
-                <div className="preview-top">
-                  <span className="live-dot" />
-                  YOUR PANEL IS READY<span>03 MEMBERS</span>
-                </div>
-                <div className="preview-avatars">
-                  {personas.map((p) => (
-                    <div key={p}>
-                      <Avatar persona={p} />
-                      <strong>{PANEL[p].name}</strong>
-                      <span>{PANEL[p].title}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="preview-question">
-                  <span className="quote-mark">“</span>
-                  <p>
-                    What makes you sure people
-                    <br />
-                    will pay for this?
-                  </p>
-                  <span className="question-tag">ALEX · THE INVESTOR</span>
-                </div>
-              </div>
-            </section>
-            <div className="section-heading">
-              <h2>A better pitch starts here</h2>
-              <span>ONE CONVERSATION. THREE PERSPECTIVES.</span>
-            </div>
-            <section className="benefits">
-              {[
-                [
-                  '01',
-                  'Bring your idea',
-                  'A quick brief or your pitch deck. Give the panel something real to challenge.',
-                ],
-                [
-                  '02',
-                  'Take the hot seat',
-                  'Three perspectives. Live reactions. Questions that go beyond your slides.',
-                ],
-                [
-                  '03',
-                  'Find your next gear',
-                  'Review the evidence. Retry a tough answer. Hear the difference.',
-                ],
-              ].map(([n, title, description]) => (
-                <article key={n}>
-                  <span>{n}</span>
-                  <h3>{title}</h3>
-                  <p>{description}</p>
-                </article>
-              ))}
-            </section>
-            <div className="section-heading history-heading">
-              <h2>
-                Recent sessions <span className="count">{history.length}</span>
-              </h2>
-              <button className="text-button" onClick={() => void run('', refresh)}>
-                Refresh <RotateCcw size={13} />
-              </button>
-            </div>
-            {history.length === 0 ? (
-              <div className="empty">
-                <div className="empty-icon">
-                  <MessageSquare size={21} />
-                </div>
-                <div>
-                  <h3>Your first practice is a fresh start.</h3>
-                  <p>Sessions and feedback will appear here. Try the sample to see how it works.</p>
-                </div>
-                <button
-                  className="icon-button"
-                  aria-label="Watch sample replay"
-                  onClick={() => void run('Loading sample', sample)}
-                >
-                  <ArrowUpRight />
-                </button>
-              </div>
-            ) : (
-              <div className="history-list">
-                {history.map((s) => (
-                  <div className="history-row" key={s.id}>
-                    <button
-                      className="session-link"
-                      onClick={() => void run('Opening session', () => openSession(s.id))}
-                    >
-                      <span className="session-icon">
-                        <MessageSquare size={18} />
-                      </span>
-                      <span>
-                        <strong>{s.name}</strong>
-                        <small>
-                          {new Date(s.createdAt).toLocaleDateString(undefined, {
-                            month: 'short',
-                            day: 'numeric',
-                          })}{' '}
-                          ·{' '}
-                          {s.mode === 'sample'
-                            ? 'Sample replay'
-                            : `${s.pressure} · ${s.duration} min`}
-                        </small>
-                      </span>
-                    </button>
-                    <span className="pill">
-                      {s.status === 'completed' ? 'Debrief ready' : s.status}
-                    </span>
-                    <button
-                      className="icon-button"
-                      aria-label={`Delete ${s.name} session`}
-                      onClick={() => {
-                        if (
-                          window.confirm(
-                            'Delete this session, transcript, feedback, and recording?',
-                          )
-                        )
-                          void run('', async () => {
-                            await api(`/sessions/${s.id}`, undefined, 'DELETE');
-                            await refresh();
-                          });
-                      }}
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-            <footer className="page-footer">
-              Built for your next big moment.<span>Simulated panel · Synthetic voices</span>
-            </footer>
-          </div>
+          <StudioHome
+            history={history}
+            busy={!!busy}
+            onStart={() => {
+              setPitch(null);
+              setConsent(false);
+              setView('prepare');
+            }}
+            onSample={() => void run('Loading sample', sample)}
+            onRefresh={() => void run('', refresh)}
+            onOpen={(id) => void run('Opening session', () => openSession(id))}
+            onDelete={(id) => {
+              if (window.confirm('Delete this session, transcript, feedback, and recording?'))
+                void run('', async () => {
+                  await api(`/sessions/${id}`, undefined, 'DELETE');
+                  await refresh();
+                });
+            }}
+          />
         )}
         {view === 'prepare' && (
           <div className="page setup">

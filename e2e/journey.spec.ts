@@ -5,7 +5,9 @@ test('sample replay, debrief, evidence, export and deletion', async ({ page }) =
   for (const item of await existing.json())
     await page.request.delete(`/api/sessions/${item.id}`, { headers: { 'x-hotseat': '1' } });
   await page.reload();
-  await expect(page.getByRole('heading', { name: 'Better under pressure.' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'A better pitch starts with a hard question.' }),
+  ).toBeVisible();
   await page.screenshot({ path: 'docs/images/home.png', fullPage: true });
   await page.getByRole('button', { name: 'Watch a sample', exact: true }).click();
   await expect(page.getByText('SAMPLE REPLAY · NO LIVE INFERENCE')).toBeVisible();
