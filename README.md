@@ -19,3 +19,9 @@ Open http://localhost:3000. This initial scaffold provides a landing page, a hea
 Run `npm run check` for types, lint, and tests, or `npm run build` for a production build.
 
 Never commit `.env` or local session data. Licensed under [MIT](LICENSE).
+
+## Session service
+
+The API now supports reviewed pitch context, text-based PDF extraction, panel control, grounded feedback, retries, history, exports, deletion, and a scripted sample. The interface is still being connected.
+
+Live preparation and dialogue require `OPENAI_API_KEY` in `.env`; `TYPESAFE_API_KEY` enables Jev reactions. Pitch context is sent to configured providers. Keys stay server-side and transcripts are stored locally.
