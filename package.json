@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "dev": "concurrently -k -n web,server \"npm run dev -w @hotseat/web\" \"npm run dev -w @hotseat/server\"",
+    "dev:agent": "npm run agent -w @hotseat/server",
     "build": "npm run build -w @hotseat/web && npm run build -w @hotseat/server",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "eslint .",

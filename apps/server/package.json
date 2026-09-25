@@ -6,8 +6,11 @@
   "scripts": {
     "dev": "tsx watch --env-file=../../.env src/index.ts",
     "start": "tsx --env-file-if-exists=../../.env src/index.ts",
+    "agent": "tsx --env-file=../../.env src/agent.ts dev",
+    "agent:download": "tsx --env-file-if-exists=../../.env src/agent.ts download-files",
     "build": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "agent:production": "tsx --env-file-if-exists=../../.env src/agent.ts start"
   },
   "dependencies": {
     "@hotseat/shared": "*",
