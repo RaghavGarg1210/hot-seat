@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { PANEL, type Persona, type Reaction } from '@hotseat/shared';
 export function Avatar({
   persona,
@@ -8,6 +9,7 @@ export function Avatar({
   reaction?: Reaction;
   small?: boolean;
 }) {
+  const clipId = useId();
   const p = PANEL[persona];
   const customer = persona === 'customer';
   const operator = persona === 'operator';
@@ -20,14 +22,14 @@ export function Avatar({
       aria-label={`${p.name}, ${reaction}`}
     >
       <defs>
-        <clipPath id={`clip-${persona}-${small}`}>
-          <rect width="240" height="240" rx="24" />
+        <clipPath id={clipId}>
+          <rect width="240" height="240" rx={small ? 12 : 0} />
         </clipPath>
       </defs>
-      <g clipPath={`url(#clip-${persona}-${small})`}>
+      <g clipPath={`url(#${clipId})`}>
         <rect width="240" height="240" fill={p.color} />
-        <circle cx="180" cy="47" r="76" fill="#fff" opacity=".16" />
-        <path d="M-20 230 Q120 120 270 235V260H-20" fill="#fff" opacity=".12" />
+        <path d="M180 0H240V240H180Z" fill="#fff" opacity=".12" />
+        <path d="M0 207H240" stroke="#292923" opacity=".12" />
         <g className="portrait">
           {customer && <path d="M67 138Q45 31 112 32Q186 15 181 151L162 198H66Z" fill="#302b29" />}
           <path

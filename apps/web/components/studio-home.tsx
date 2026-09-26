@@ -96,6 +96,7 @@ export function StudioHome({
                 key={persona}
                 className={index === selected ? 'seat-choice selected' : 'seat-choice'}
                 aria-pressed={index === selected}
+                aria-label={`${PANEL[persona].name}, ${PANEL[persona].title.toLowerCase()}`}
                 onClick={() => setSelected(index)}
               >
                 <Avatar persona={persona} small />

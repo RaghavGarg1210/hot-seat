@@ -838,6 +838,17 @@ textarea::placeholder {
   border-radius: 50%;
   background: var(--accent);
 }
+.stage-label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 0 12px;
+  font-size: 10px;
+  color: var(--muted);
+}
+.stage-label span:first-child {
+  letter-spacing: 0.15em;
+}
 .panel-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

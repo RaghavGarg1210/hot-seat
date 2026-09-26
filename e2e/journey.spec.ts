@@ -104,3 +104,56 @@ test('real session events arrive immediately through the web proxy', async ({ pa
   expect(event).toMatchObject({ type: 'state', status: 'completed' });
   await page.request.delete(`/api/sessions/${session.id}`, { headers: { 'x-hotseat': '1' } });
 });
+
+test('panel previews work with a keyboard and keep their selected state', async ({ page }) => {
+  await page.goto('/');
+  const customer = page.getByRole('button', { name: 'Maya, the customer', exact: true });
+  await customer.focus();
+  await page.keyboard.press('Enter');
+  await expect(customer).toHaveAttribute('aria-pressed', 'true');
+  await expect(
+    page.getByText('I already have a way of doing this. Why would I switch?'),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Alex, the investor', exact: true }),
+  ).toHaveAttribute('aria-pressed', 'false');
+  await page.keyboard.press('Tab');
+  await expect(
+    page.getByRole('button', { name: 'Jordan, the operator', exact: true }),
+  ).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(
+    page.getByText('You have six weeks. What are you actually going to ship?'),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Start a session', exact: true }).click();
+  await expect(page.locator('#workspace')).toBeFocused();
+  await page.getByRole('button', { name: /Intense/ }).click();
+  await expect(page.getByRole('button', { name: /Intense/ })).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await page.getByRole('button', { name: '5 min' }).click();
+  await expect(page.getByRole('button', { name: '5 min' })).toHaveAttribute('aria-pressed', 'true');
+});
+
+test('studio, room and feedback fit phone and tablet widths', async ({ page }) => {
+  for (const width of [375, 768, 1024]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto('/');
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    await page.getByRole('button', { name: 'Watch a sample', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'See the debrief' })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+    await page.getByRole('button', { name: 'See the debrief' }).click();
+    await expect(
+      page.getByRole('heading', { name: 'Interest is not a purchase commitment' }),
+    ).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  }
+});

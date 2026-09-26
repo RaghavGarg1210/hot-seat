@@ -36,6 +36,9 @@ import { StudioHome, type SessionSummary } from './studio-home';
 
 type View = 'home' | 'prepare' | 'room' | 'debrief';
 const personas = Object.keys(PANEL) as Persona[];
+function scrollBehavior(): ScrollBehavior {
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth';
+}
 async function api<T>(path: string, body?: unknown, method?: string): Promise<T> {
   const response = await fetch(`/api${path}`, {
     method: method || (body ? 'POST' : 'GET'),
@@ -52,6 +55,10 @@ async function api<T>(path: string, body?: unknown, method?: string): Promise<T>
 
 export default function HotSeat() {
   const [view, setView] = useState<View>('home');
+  useEffect(() => {
+    document.getElementById('workspace')?.focus({ preventScroll: true });
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [view]);
   const [history, setHistory] = useState<SessionSummary[]>([]);
   const [providers, setProviders] = useState({ openai: false, jev: false });
   const [session, setSession] = useState<Session | null>(null);
@@ -141,7 +148,7 @@ export default function HotSeat() {
     source.onerror = () => setNotice('Connection interrupted. Reconnecting to the session…');
   }
   useEffect(() => {
-    lastTurn.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    lastTurn.current?.scrollIntoView({ behavior: scrollBehavior(), block: 'nearest' });
   }, [session?.transcript.length, partial]);
   useEffect(() => {
     if (!replaying || !session || session.mode !== 'sample') return;
@@ -614,6 +621,7 @@ export default function HotSeat() {
                     <button
                       key={p}
                       className={`pressure-option ${pressure === p ? 'selected' : ''}`}
+                      aria-pressed={pressure === p}
                       onClick={() => setPressure(p)}
                     >
                       <span>
@@ -629,11 +637,12 @@ export default function HotSeat() {
                       {pressure === p ? <Check size={18} /> : <span className="radio" />}
                     </button>
                   ))}
-                  <label className="duration-label">Session length</label>
-                  <div className="segmented">
+                  <div className="duration-label">Session length</div>
+                  <div className="segmented" role="group" aria-label="Session length">
                     {([5, 8, 12] as const).map((n) => (
                       <button
                         className={duration === n ? 'selected' : ''}
+                        aria-pressed={duration === n}
                         key={n}
                         onClick={() => setDuration(n)}
                       >
@@ -705,6 +714,10 @@ export default function HotSeat() {
                   : formatTime(session.duration * 60000 - session.elapsedMs)}
                 <small>{session.mode === 'sample' ? 'REPLAY' : session.status.toUpperCase()}</small>
               </div>
+            </div>
+            <div className="stage-label">
+              <span>YOUR PANEL</span>
+              <span>Three perspectives. One conversation.</span>
             </div>
             <div className="panel-grid">
               {personas.map((p) => (
@@ -902,9 +915,11 @@ export default function HotSeat() {
             )}
             <p className="room-footnote">
               {busy ||
-                (session.recording
-                  ? 'Recording enabled for this session.'
-                  : 'Audio recording is off. Your transcript stays in your local workspace.')}
+                (session.mode === 'sample'
+                  ? 'A scripted, silent rehearsal. Try a live session with your own pitch.'
+                  : session.recording
+                    ? 'Recording enabled for this session.'
+                    : 'Audio recording is off. Your transcript stays in your local workspace.')}
             </p>
           </div>
         )}
@@ -1011,7 +1026,7 @@ export default function HotSeat() {
                         setSelectedTurn(item.turnIds[0]);
                         document
                           .getElementById(`turn-${item.turnIds[0]}`)
-                          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                          ?.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
                       }}
                     >
                       See the moment <ArrowUpRight size={14} />
