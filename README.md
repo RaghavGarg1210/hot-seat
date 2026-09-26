@@ -25,6 +25,7 @@ A rehearsed pitch can sound great until someone asks, “Why would customers pay
 - **Grounded feedback:** critiques point to actual transcript turns and offer a concrete next step.
 - **Retry a tough question:** keep the question, change your answer, and review both attempts.
 - **Your local workspace:** SQLite history, Markdown/JSON exports, optional audio recordings, and deletion controls.
+- **A focused studio:** warm paper and ink for preparation and review, a dark practice room, keyboard controls, and reduced-motion support.
 - **A key-free sample:** explore a clearly labeled, scripted replay and its debrief before configuring providers.
 
 **Status:** early development preview. Local automated checks exercise the controller, API, PDF extraction, sample interface, and a deterministic provider-backed lifecycle. Real model quality, microphone behavior, and end-to-end voice latency still need live validation. See [verification status](docs/VERIFICATION.md).

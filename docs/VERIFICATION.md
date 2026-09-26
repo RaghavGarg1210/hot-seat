@@ -1,12 +1,12 @@
 # Verification status
 
-Checked locally on 2026-09-24 with Node.js 22.23.0 on macOS.
+UI refresh checked locally on 2026-09-25 with Node.js 22.23.0 on macOS: type checking, lint, 24 unit/integration tests, seven browser tests, and the production build passed. The original clean-install, Compose configuration, voice-plugin, and dependency-audit checks below were performed on 2026-09-24.
 
 ## Passing
 
 - TypeScript checking and ESLint.
 - 24 unit/integration tests: controller cancellation and duplicate handling, pressure rules, paused timers, stale decisions, feedback references, provider-failure behavior, origin/host checks, authenticated worker endpoints, local persistence, deletion, PDF extraction and limits, and the session-to-retry lifecycle with deterministic provider fixtures.
-- Five Playwright browser tests: sample/debrief/evidence/export/deletion, setup and disclosure controls, small-screen/reduced-motion behavior, and automatic transition to the debrief on expiry, and immediate delivery of real session events through the web proxy.
+- Seven Playwright browser tests: sample/debrief/evidence/export/deletion, setup and disclosure controls, small-screen/reduced-motion behavior, and automatic transition to the debrief on expiry, immediate delivery of real session events through the web proxy, keyboard-operated panel previews and selected-state controls, and phone/tablet layout coverage.
 - Production Next.js build and service type checking.
 - Clean temporary installation using `npm ci`, `npm run setup`, `npm run check`, and `npm run build`.
 - Compose configuration validation and existence of the pinned LiveKit image.
