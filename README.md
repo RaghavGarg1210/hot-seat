@@ -28,7 +28,7 @@ A rehearsed pitch can sound great until someone asks, “Why would customers pay
 - **A focused studio:** warm paper and ink for preparation and review, a dark practice room, keyboard controls, and reduced-motion support.
 - **A key-free sample:** explore a clearly labeled, scripted replay and its debrief before configuring providers.
 
-**Status:** early development preview. Local automated checks exercise the controller, API, PDF extraction, sample interface, and a deterministic provider-backed lifecycle. Real model quality, microphone behavior, and end-to-end voice latency still need live validation. See [verification status](docs/VERIFICATION.md).
+HotSeat is an open-source, self-hosted app for startup pitch practice. Run it locally and connect your own model providers for live sessions.
 
 ## Quick start
 
@@ -42,7 +42,7 @@ npm run setup
 npm run dev
 ```
 
-Open **http://localhost:3000**, then select **Watch a sample**. No provider keys or voice server are needed for the sample. The repository is currently private, so cloning requires access.
+Open **http://localhost:3000**, then select **Watch a sample**. No provider keys or voice server are needed for the sample.
 
 ### Enable live practice
 
@@ -117,14 +117,14 @@ The controller is the authority for session state, turn ownership, pressure rule
 
 One speech pipeline serves all three panelists, switching voices between turns. Decisions from outdated speech are discarded. Missing Jev results fall back to questions at completed turns; speech failures pause the session and offer reconnection or text practice.
 
-| Area         | Technology                                                         |
-| ------------ | ------------------------------------------------------------------ |
-| Interface    | Next.js, React, TypeScript, original SVG characters, bundled fonts |
-| Service      | Fastify, Zod, Node.js SQLite                                       |
-| Voice        | LiveKit Agents, Silero VAD, OpenAI STT/TTS                         |
-| Decisions    | TypeSafe Jev, configurable through `JEV_MODEL`                     |
-| Text         | OpenAI Responses API, versioned prompts                            |
-| Verification | Vitest, Playwright, labeled decision fixtures                      |
+| Area      | Technology                                                         |
+| --------- | ------------------------------------------------------------------ |
+| Interface | Next.js, React, TypeScript, original SVG characters, bundled fonts |
+| Service   | Fastify, Zod, Node.js SQLite                                       |
+| Voice     | LiveKit Agents, Silero VAD, OpenAI STT/TTS                         |
+| Decisions | TypeSafe Jev, configurable through `JEV_MODEL`                     |
+| Text      | OpenAI Responses API, versioned prompts                            |
+| Testing   | Vitest, Playwright, labeled decision fixtures                      |
 
 Default models are `gpt-6-sol`, `gpt-realtime-whisper`, `gpt-4o-mini-tts`, and `jev-latest`. Override them in `.env` to match models available to your provider account. The three voices are alloy, coral, and ash.
 
@@ -152,7 +152,7 @@ npm run eval -- --live    # Jev comparison; requires a TypeSafe key
 
 The browser suite uses synthetic pitch data and captures the screenshots shown here. No live model calls run in CI.
 
-Evaluation output is written to `evals/results/latest.json`. The set is intentionally small and hand-labeled; it is useful for regression checks, not a general accuracy claim. Reaction latency and spoken-response latency are measured separately during live sessions and included in JSON exports. Targets are p95 below 1 second and 2.5 seconds respectively; neither target is claimed as achieved without a live run.
+Evaluation output is written to `evals/results/latest.json`. The set is intentionally small and hand-labeled; it is useful for regression checks, not a general accuracy claim. Reaction latency and spoken-response latency are measured separately during live sessions and included in JSON exports.
 
 ## Troubleshooting
 

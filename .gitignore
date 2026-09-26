@@ -12,3 +12,6 @@ playwright-report/
 # Local framework assistant guidance
 apps/web/AGENTS.md
 apps/web/CLAUDE.md
+
+# Generated local evaluation output
+evals/results/
